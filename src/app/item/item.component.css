@@ -1,11 +1,4 @@
-.bg-white{
-    background-color: white;
-}
 
-.flex {
-    display: flex;
-
-}
 
 .hidden{
     display: none;
@@ -17,7 +10,6 @@
 
 
 .item-width{
-
     border-radius: 25px;
     max-width: 100%
 }
@@ -27,21 +19,6 @@
     margin-top: 20px;
     height: fit-content;
 
-}
-
-.justify-between{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.bold{
-    font-weight: bold;
-}
-
-.text-padding{
-    padding: 25px;
 }
 
 

@@ -1,13 +1,13 @@
-<div class="flex">
-    <app-nav></app-nav>
+<div class="flex ">
+    <app-categories></app-categories>
 
-    <div class="bg-grey router-comp">
-        <div class="bg-grey-darker flex-arrow">
+    <div class="bg-grey router-comp bg-gray-200">
+        <div class="bg-stone-700 h-28 flex items-center">
             <a *ngIf="!(title === 'Επιλεξε μενου')" class="padding cursor-pointer"><img src="assets/arrow_back.png"
                     alt="" (click)="goBack()"></a>
-            <p class="padding text-color">{{title}}</p>
+            <p class="pl-4 text-white">{{title}}</p>
         </div>
-        <div class="justify overflow">
+        <div class="flex justify-center self-start overflow-y-auto ">
             <router-outlet></router-outlet>
         </div>
     </div>
