@@ -1,0 +1,29 @@
+<div class="flex ">
+    <div class="left-side">
+        <div>
+            <img [src]="item.imageUrl" alt="" width="300px" class="img margin">
+        </div>
+        <div>
+            <p class="bold margin">{{item.title}}</p>
+            <p class="margin">{{item.description}}</p>
+        </div>
+        <div class="small-flex">
+            <a [href]="item.websiteUrl"><img src="assets/website.png" alt="" width="50px"></a>
+            <a [href]="item.youtubeUrl"><img src="assets/youtube.png" alt="" width="50px"></a>
+        </div>
+    </div>
+    <div class="overflow max-height">
+        <div class="margin">
+            <p class="bold margin">Υλικα</p>
+            <ul *ngFor="let nt of item.ingredients" class="decoration margin">
+                <li>{{nt}}</li>
+            </ul>
+        </div>
+        <div>
+            <p class="bold margin">Οδηγιες εκτελεσης</p>
+            <ul *ngFor="let inst of item.instructions" class="decoration">
+                <li>{{inst}}</li>
+            </ul>
+        </div>
+    </div>
+</div>

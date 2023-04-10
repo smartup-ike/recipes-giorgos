@@ -1,0 +1,20 @@
+<div class="div-width">
+
+
+    <div class="item-width bg-white">
+        <img [src]="imageUrl" alt="" class="img-width">
+        <div class="justify-between bold">
+            <p class="text-padding">{{title}}</p>
+            <p (click)="setHidden($event)" class="cursor-pointer">
+                <img *ngIf="isHidden" src="assets/arrow_right.png" alt="">
+                <img *ngIf="!isHidden" src="assets/arrow_down.png" alt="">
+            </p>
+        </div>
+        <div [class.hidden]="isHidden" class="text-padding">
+            <p>{{description}}</p>
+            <div>
+                <a [routerLink]="['/item',id]" class="button"> Φτιαξε τη συνταγη</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+.flex {
+    display: flex;
+}
+
+.flex-arrow{
+    display: flex;
+    align-items: center;
+}
+
+.bg-grey{
+    background-color: #d6d6d6;
+}
+
+.router-comp{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    
+}
+
+.bg-grey-darker{
+    background-color: #696262;
+    height:100px;
+}
+
+.justify{
+    display: flex;
+    justify-content: center;
+    align-self: start;
+
+}
+
+.padding{
+    padding: 0px 20px;
+}
+
+.text-color{
+    color: white;
+}
+
+.overflow{
+    overflow-y: auto;
+}
+

@@ -1,0 +1,14 @@
+<div class="flex">
+    <app-nav></app-nav>
+
+    <div class="bg-grey router-comp">
+        <div class="bg-grey-darker flex-arrow">
+            <a *ngIf="!(title === 'Επιλεξε μενου')" class="padding cursor-pointer"><img src="assets/arrow_back.png"
+                    alt="" (click)="goBack()"></a>
+            <p class="padding text-color">{{title}}</p>
+        </div>
+        <div class="justify overflow">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="nav-width">
+    <ul *ngFor="let category of menu">
+        <li class="list">
+            <a [routerLink]="['/category',category.id]" class="link" (click)="changeID(category.title)">
+                <p>{{category.title}}</p>
+            </a>
+        </li>
+    </ul>
+</div>
