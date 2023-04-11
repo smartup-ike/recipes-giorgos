@@ -13,6 +13,10 @@ const redirectToHome = () => redirectUnauthorizedTo('/login');
 
 const routes: Routes = [
   {
+    path: '',
+    component: HomeComponent,
+  },
+  {
     path: 'category/:id',
     component: CategoryComponent,
     data: {
