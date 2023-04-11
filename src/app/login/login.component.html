@@ -1,20 +1,21 @@
-<div class="flex justify-center items-center bg-red-500">
+<div class="flex h-full justify-center items-center ">
     <div>
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
-            <div>
-                <label>Email</label>
-                <input type="email" [formControl]="email" placeholder="enter email">
+        <form [formGroup]="loginForm" (ngSubmit)="login()"
+            class=" rounded-md border-solid border-black border-2 px-10 text-center bg-gray-50">
+            <div class="p-8 flex flex-col">
+                <label class="py-4 font-bold">Email</label>
+                <input type="email" [formControl]="email" placeholder="enter email" class="p-4 rounded-sm">
             </div>
-            <div>
-                <label>Password</label>
-                <input type="password" [formControl]="password" placeholder="password">
+            <div class="p-8 flex flex-col">
+                <label class="py-4 font-bold">Password</label>
+                <input type="password" [formControl]="password" placeholder="password" class="p-4 rounded-sm">
             </div>
-            <div>
-                <button [disabled]="!loginForm.valid" type="submit">
+            <div class="text-center pb-8 pt-4">
+                <button [disabled]="!loginForm.valid" type="submit"
+                    class="bg-emerald-400 p-4 rounded-md hover:bg-emerald-500">
                     Login
                 </button>
             </div>
         </form>
-
     </div>
 </div>
