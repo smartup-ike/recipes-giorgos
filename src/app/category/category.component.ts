@@ -19,7 +19,7 @@ export class CategoryComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.api.getCategory(params.get('id')!).subscribe((items) => {
-        this.items = items.items;
+        console.log(items);
       });
     });
   }

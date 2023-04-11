@@ -31,12 +31,11 @@ export class ItemDetailComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.api.getItem(params.get('id')!).subscribe((item) => {
-        this.item = item;
-
-        this.data.changeID(item.title);
-      });
-    });
+    // this.route.paramMap.subscribe((params) => {
+    //   this.api.getItem(params.get('id')!).subscribe((item) => {
+    //     this.item = item;
+    //     this.data.changeID(item.title);
+    //   });
+    // });
   }
 }
