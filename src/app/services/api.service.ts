@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, from, of, switchMap } from 'rxjs';
-import Category from '../models/category.model';
+
 import { Categories } from '../models/categories.model';
 import { Items } from '../models/item.model';
 import { ItemDetail } from '../models/item-detail.model';
