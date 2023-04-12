@@ -12,7 +12,8 @@
         <div [class.hidden]="isHidden" class="p-8">
             <p>{{description}}</p>
             <div>
-                <a [routerLink]="['/item',id]" class="button"> Φτιαξε τη συνταγη</a>
+                <a [routerLink]="['/item',id]" class="button" (click)="changeItem(item!)"> Φτιαξε τη
+                    συνταγη</a>
             </div>
         </div>
     </div>
