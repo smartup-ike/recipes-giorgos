@@ -1,37 +1,45 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 import { Observable, from, of } from 'rxjs';
 import { mergeMap, switchMap } from 'rxjs/operators';
-
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { Categories } from '../models/categories.model';
-import { Item } from '../models/item.model';
-import { ItemDetail } from '../models/item-detail.model';
-import MenuOption from '../models/menuOption.model';
+
+import { MenuOption } from '../models/menuOption.model';
+import { OptionKeys } from '../models/option-keys.mode';
+import { ItemSummary } from '../models/item-summary.model';
+import { ItemContent } from '../models/item-content.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private menuUrl =
-    'https://us-central1-smartup-hr-test-frontend.cloudfunctions.net/menu';
-  private items =
-    'https://us-central1-smartup-hr-test-frontend.cloudfunctions.net/categories/';
-  private item =
-    'https://us-central1-smartup-hr-test-frontend.cloudfunctions.net/items/';
-
   constructor(private db: AngularFireDatabase) {}
 
-  getMenu(): Observable<any> {
-    return this.db.list('menu_option').valueChanges();
+  getMenuOptions(): Observable<MenuOption[]> {
+    return this.db.list<MenuOption>('menu_options').valueChanges();
   }
 
-  getCategory(id: string): Observable<any> {
-    return this.db.list<Item[]>(`item_keys/${id}`).valueChanges();
+  getOptionKeys(path: string): Observable<OptionKeys | null> {
+    return this.db.object<OptionKeys>(path).valueChanges();
   }
 
-  // getItem(id: string): Observable<ItemDetail> {
-  //   return this.http.get<ItemDetail>(`${this.item}/${id}`);
-  // }
+  getSummary(id: string): Observable<ItemSummary | null> {
+    return this.db.object<ItemSummary>(`item_summaries/${id}`).valueChanges();
+  }
+
+  getItemContent(id: string): Observable<ItemContent | null> {
+    return this.db.object<ItemContent>(`item_contents/${id}`).valueChanges();
+  }
+
+  getItemWebsiteUrl(id: string): Observable<any> {
+    return this.db
+      .object<any>(`item_external_links/website_urls/${id}`)
+      .valueChanges();
+  }
+
+  getItemYoutubeUrl(id: string): Observable<any> {
+    return this.db
+      .object<any>(`item_external_links/youtube_urls/${id}`)
+      .valueChanges();
+  }
 }
