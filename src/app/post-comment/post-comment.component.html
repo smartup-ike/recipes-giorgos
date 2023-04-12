@@ -1,9 +1,10 @@
-<div class="p-4 mb-8 flex rounded-md items-center bg-white min-h-36 h-36 max-h-36">
+<form [formGroup]="commentForm" class="p-4 mb-8 flex rounded-md items-center bg-white min-h-36 h-36 max-h-36">
     <div class="w-11/12  mr-4">
-        <input type="text" placeholder="review this recipe" class="px-4 py-6 border-solid border w-full rounded-md">
+        <input [formControl]="text" type="text" placeholder="review this recipe"
+            class="px-4 py-6 border-solid border w-full rounded-md">
     </div>
     <div class="w-1/12 flex justify-center">
         <button class="bg-emerald-400 px-4 py-6 rounded-md text-white font-bold hover:bg-emerald-500"
             (click)="postComment($event)">Submit</button>
     </div>
-</div>
+</form>
