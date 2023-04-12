@@ -37,12 +37,29 @@ export class ItemDetailComponent implements OnInit {
   subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
+    //get item summary
     this.subscription = this.data.currentItem.subscribe((item) => {
-      this.itemSummary = item;
+      //on refresh
+      if (!item.id) {
+        this.route.paramMap.subscribe((params) => {
+          let id = params.get('id')!;
+          this.api.getSummary(id).subscribe((summary) => {
+            this.itemSummary = summary as ItemSummary;
 
-      this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${item.image_path}?alt=media`;
-      this.data.changeID(item.title);
+            this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
+            this.data.changeID(summary?.title as string);
+          });
+        });
+      } else {
+        //when navigating with button
+        this.itemSummary = item;
+
+        this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${item.image_path}?alt=media`;
+        this.data.changeID(item.title);
+      }
     });
+
+    //get the rest of the data
 
     this.route.paramMap.subscribe((params) => {
       let id = params.get('id')!;
