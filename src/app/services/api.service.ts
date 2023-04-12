@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { Observable, from, of } from 'rxjs';
-import { mergeMap, switchMap } from 'rxjs/operators';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-
 import { MenuOption } from '../models/menuOption.model';
 import { OptionKeys } from '../models/option-keys.mode';
 import { ItemSummary } from '../models/item-summary.model';
@@ -31,15 +28,15 @@ export class ApiService {
     return this.db.object<ItemContent>(`item_contents/${id}`).valueChanges();
   }
 
-  getItemWebsiteUrl(id: string): Observable<any> {
+  getItemWebsiteUrl(id: string): Observable<string | null> {
     return this.db
-      .object<any>(`item_external_links/website_urls/${id}`)
+      .object<string>(`item_external_links/website_urls/${id}`)
       .valueChanges();
   }
 
-  getItemYoutubeUrl(id: string): Observable<any> {
+  getItemYoutubeUrl(id: string): Observable<string | null> {
     return this.db
-      .object<any>(`item_external_links/youtube_urls/${id}`)
+      .object<string>(`item_external_links/youtube_urls/${id}`)
       .valueChanges();
   }
 }

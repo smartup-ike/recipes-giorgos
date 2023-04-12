@@ -2,13 +2,13 @@
     <app-categories></app-categories>
 
     <div class="bg-grey router-comp bg-gray-200">
-        <div class="bg-stone-700 h-28 flex items-center">
+        <div class="bg-stone-700 min-h-28 h-28 max-h-28 flex items-center">
             <a *ngIf="!(title === 'Επιλεξε μενου')" class="padding cursor-pointer"><img src="assets/arrow_back.png"
                     alt="" (click)="goBack()"></a>
             <p class="pl-4 text-white">{{title}}</p>
         </div>
 
-        <div class="h-screen">
+        <div class="overflow-y-auto">
             <router-outlet></router-outlet>
         </div>
 

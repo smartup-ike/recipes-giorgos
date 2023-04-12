@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
     private _location: Location
   ) {}
 
-  @Input() title = 'Επιλεξε μενου';
+  title = '';
 
   subscription: Subscription = new Subscription();
 
