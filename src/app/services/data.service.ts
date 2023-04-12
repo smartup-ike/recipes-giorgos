@@ -8,7 +8,12 @@ import { ItemSummary } from '../models/item-summary.model';
 export class DataService {
   private id = new BehaviorSubject('Επιλεξε μενου');
   private path = new BehaviorSubject('');
-  private item = new BehaviorSubject({ id: '', title: '' });
+  private item = new BehaviorSubject<ItemSummary>({
+    id: '',
+    title: '',
+    image_path: '',
+    description: '',
+  });
   currentID = this.id.asObservable();
   currentPath = this.path.asObservable();
   currentItem = this.item.asObservable();

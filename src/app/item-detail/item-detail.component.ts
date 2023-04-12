@@ -28,14 +28,19 @@ export class ItemDetailComponent implements OnInit {
     websiteUrl: '',
     youtubeUrl: '',
   };
-  itemSummary: ItemSummary | undefined;
+  itemSummary: ItemSummary = {
+    id: '',
+    title: '',
+  };
 
+  url: string = '';
   subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.subscription = this.data.currentItem.subscribe((item) => {
       this.itemSummary = item;
 
+      this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${item.image_path}?alt=media`;
       this.data.changeID(item.title);
     });
 
