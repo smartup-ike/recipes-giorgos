@@ -1,6 +1,6 @@
 <div class="div-width">
     <div class="item-width bg-white">
-        <img [src]="imageUrl" alt="" class="img-width">
+        <img [src]="url" alt="" class="img-width">
         <div class="flex place-content-between items-center font-bold mb-2">
             <p class="p-8 ">{{title}}</p>
             <p (click)="setHidden($event)" class="cursor-pointer min-w-fit">
@@ -8,6 +8,7 @@
                 <img *ngIf="!isHidden" src="assets/arrow_down.png" alt="">
             </p>
         </div>
+        <!--   -->
         <div [class.hidden]="isHidden" class="p-8">
             <p>{{description}}</p>
             <div>

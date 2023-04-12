@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
-import { Item, Items } from '../models/item.model';
+import { ItemSummary } from '../models/item-summary.model';
+import { Subscription } from 'rxjs';
+import { DataService } from '../services/data.service';
+import { OptionKeys } from '../models/option-keys.mode';
 
 @Component({
   selector: 'app-category',
@@ -12,15 +15,27 @@ import { Item, Items } from '../models/item.model';
 export class CategoryComponent implements OnInit {
   constructor(private api: ApiService, private route: ActivatedRoute) {}
 
-  items: Item[] = [];
+  itemsArr: ItemSummary[] = [];
 
-  title = 'Επιλεξε μενου';
+  subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      this.api.getCategory(params.get('id')!).subscribe((items) => {
-        console.log(items);
-      });
+      let id = params.get('id');
+
+      if (id) {
+        this.api.getOptionKeys(id).subscribe((items) => {
+          this.itemsArr = [];
+
+          for (const item in items) {
+            this.api.getSummary(item).subscribe((summary) => {
+              (summary as ItemSummary).id = item;
+
+              this.itemsArr.push(summary as ItemSummary);
+            });
+          }
+        });
+      }
     });
   }
 }
