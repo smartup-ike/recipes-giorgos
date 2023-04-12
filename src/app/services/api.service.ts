@@ -5,6 +5,7 @@ import { MenuOption } from '../models/menuOption.model';
 import { OptionKeys } from '../models/option-keys.mode';
 import { ItemSummary } from '../models/item-summary.model';
 import { ItemContent } from '../models/item-content.model';
+import { Comment } from '../models/comment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +39,9 @@ export class ApiService {
     return this.db
       .object<string>(`item_external_links/youtube_urls/${id}`)
       .valueChanges();
+  }
+
+  getComments(id: string): Observable<Comment[]> {
+    return this.db.list<Comment>(`item_reviews/${id}`).valueChanges();
   }
 }

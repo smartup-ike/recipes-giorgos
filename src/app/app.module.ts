@@ -13,6 +13,9 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from 'src/environments/environment.development';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { CommentsComponent } from './comments/comments.component';
+import { CommentComponent } from './comment/comment.component';
+import { PostCommentComponent } from './post-comment/post-comment.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { LoginComponent } from './login/login.component';
     ItemDetailComponent,
     HomeComponent,
     LoginComponent,
+    CommentsComponent,
+    CommentComponent,
+    PostCommentComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,12 @@
+<div class="w-9/12 m-auto mt-12 rounded-md">
+    <div class="flex flex-col w-full">
+        <app-post-comment></app-post-comment>
+    </div>
+    <div class="flex flex-col w-full ">
+        <div *ngFor="let comment of comments">
+            <app-comment [text]="comment.text" [id]="comment.id" [authorUid]="comment.authorUid"
+                [name]="comment.author.name" [email]="comment.author.email" [imageUrl]="comment.author.imageUrl"
+                [timestamp]="comment.timestamp"></app-comment>
+        </div>
+    </div>
+</div>
