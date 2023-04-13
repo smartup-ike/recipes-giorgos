@@ -82,4 +82,8 @@ export class ItemDetailComponent implements OnInit {
       });
     });
   }
+
+  rateRecipe(e: Event) {
+    console.log((e.target as HTMLSpanElement).innerText);
+  }
 }

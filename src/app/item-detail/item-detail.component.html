@@ -8,6 +8,15 @@
                 <p class="font-bold mb-8 mr-8">{{itemSummary.title}}</p>
                 <p class="mb-8 mr-8">{{itemSummary.description}}</p>
             </div>
+            <div>
+                <div (click)="rateRecipe($event)" class="flex mb-8 justify-center font-bold">
+                    <app-rate-button [number]="1"></app-rate-button>
+                    <app-rate-button [number]="2"></app-rate-button>
+                    <app-rate-button [number]="3"></app-rate-button>
+                    <app-rate-button [number]="4"></app-rate-button>
+                    <app-rate-button [number]="5"></app-rate-button>
+                </div>
+            </div>
             <div class="flex justify-center">
                 <a [href]="itemLinks.websiteUrl"><img src="assets/website.png" alt="" width="50px" class="mr-8"></a>
                 <a [href]="itemLinks.youtubeUrl"><img src="assets/youtube.png" alt="" width="50px" class="mr-8"></a>
