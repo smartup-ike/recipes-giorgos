@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comment/comment.component';
 import { PostCommentComponent } from './post-comment/post-comment.component';
+import { USE_EMULATOR as USE_FUNCTIONS_EMULATORS } from '@angular/fire/compat/functions';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,9 @@ import { PostCommentComponent } from './post-comment/post-comment.component';
     AngularFireAuthModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: USE_FUNCTIONS_EMULATORS, useValue: ['localhost', 5001] },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
