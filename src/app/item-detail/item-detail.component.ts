@@ -14,6 +14,8 @@ import { ItemComponent } from '../item/item.component';
   styleUrls: ['./item-detail.component.css'],
 })
 export class ItemDetailComponent implements OnInit {
+  isRated = false;
+
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
@@ -33,10 +35,19 @@ export class ItemDetailComponent implements OnInit {
     title: '',
   };
 
-  url: string = '';
+  itemRating = '';
+  itemRatingRounded = 0;
+  url = '';
   subscription: Subscription = new Subscription();
+  stars: Element[] = [];
 
   ngOnInit(): void {
+    const ratingStars = [document.querySelectorAll('.rating__star')];
+
+    ratingStars[0].forEach((el) => {
+      this.stars.push(el);
+    });
+
     //get item summary
     this.subscription = this.data.currentItem.subscribe((item) => {
       //on refresh
@@ -80,10 +91,56 @@ export class ItemDetailComponent implements OnInit {
           this.itemLinks.youtubeUrl = youtubeUrl;
         }
       });
+
+      this.api.getRating(id).subscribe((rating) => {
+        this.itemRating = rating?.rating!;
+        this.itemRatingRounded = Math.round(
+          rating?.rating as unknown as number
+        );
+
+        let id: number = Math.round(rating?.rating as unknown as number);
+
+        const starClassActive = 'rating__star fas fa-star m-4 cursor-pointer';
+        const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
+        const starsLength = this.stars.length;
+
+        this.stars.map((star) => {
+          if (star.className === starClassInactive) {
+            for (id; id > 0; --id) {
+              this.stars[id - 1].className = starClassActive;
+            }
+          } else {
+            for (id; id < starsLength && id > 0; ++id) {
+              this.stars[id].className = starClassInactive;
+            }
+          }
+        });
+      });
     });
   }
 
   rateRecipe(e: Event) {
-    console.log((e.target as HTMLSpanElement).innerText);
+    let id: number = ((e.target as HTMLElement).id as unknown as number) - 1;
+    const star = e.target as HTMLElement;
+    const starClassActive = 'rating__star fas fa-star m-4 cursor-pointer';
+    const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
+    const starsLength = this.stars.length;
+
+    console.log(id);
+
+    if (id) {
+      if (star.className === starClassInactive) {
+        for (id; id >= 0; --id) {
+          this.stars[id].className = starClassActive;
+        }
+      } else {
+        let clickedID = id;
+        for (id; id < starsLength; ++id) {
+          if (id !== clickedID) {
+            this.stars[id].className = starClassInactive;
+          }
+        }
+      }
+    }
   }
 }

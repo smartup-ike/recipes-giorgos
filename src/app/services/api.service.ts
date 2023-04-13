@@ -6,6 +6,7 @@ import { OptionKeys } from '../models/option-keys.mode';
 import { ItemSummary } from '../models/item-summary.model';
 import { ItemContent } from '../models/item-content.model';
 import { Comment } from '../models/comment.model';
+import { Ratings } from '../models/ratings.model';
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +44,11 @@ export class ApiService {
 
   getComments(id: string): Observable<Comment[]> {
     return this.db.list<Comment>(`item_reviews/${id}`).valueChanges();
+  }
+
+  getRating(id: string): Observable<Ratings | null> {
+    return this.db
+      .object<Ratings>(`item_ratings/${id}/averageRatingData`)
+      .valueChanges();
   }
 }

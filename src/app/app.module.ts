@@ -17,7 +17,6 @@ import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comment/comment.component';
 import { PostCommentComponent } from './post-comment/post-comment.component';
 import { USE_EMULATOR as USE_FUNCTIONS_EMULATORS } from '@angular/fire/compat/functions';
-import { RateButtonComponent } from './rate-button/rate-button.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +30,6 @@ import { RateButtonComponent } from './rate-button/rate-button.component';
     CommentsComponent,
     CommentComponent,
     PostCommentComponent,
-    RateButtonComponent,
   ],
   imports: [
     BrowserModule,
