@@ -41,9 +41,11 @@ export class PostCommentComponent implements OnInit {
 
   ngOnInit(): void {
     this.auth.user.subscribe((user) => {
-      this.email = user?.email!;
-      this.uid = user?.uid!;
-      this.name = user?.displayName!;
+      if (user) {
+        this.email = user.email ?? 'anonymous';
+        this.uid = user.uid;
+        this.name = user.displayName ?? 'anonymous';
+      }
     });
 
     this.route.paramMap.subscribe((param) => {

@@ -17,6 +17,7 @@ import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comment/comment.component';
 import { PostCommentComponent } from './post-comment/post-comment.component';
 import { USE_EMULATOR as USE_FUNCTIONS_EMULATORS } from '@angular/fire/compat/functions';
+import { USE_EMULATOR as USE_DATABASE_EMULATORS } from '@angular/fire/compat/database';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { USE_EMULATOR as USE_FUNCTIONS_EMULATORS } from '@angular/fire/compat/fu
   ],
   providers: [
     { provide: USE_FUNCTIONS_EMULATORS, useValue: ['localhost', 5001] },
+    { provide: USE_DATABASE_EMULATORS, useValue: ['localhost', 9000] },
   ],
   bootstrap: [AppComponent],
 })

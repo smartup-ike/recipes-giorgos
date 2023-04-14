@@ -51,4 +51,10 @@ export class ApiService {
       .object<Ratings>(`item_ratings/${id}/averageRatingData`)
       .valueChanges();
   }
+
+  updateItemRating(id: string, uid: string, rating: number) {
+    return this.db
+      .object<any>(`item_ratings/${id}/userRatings/${uid}`)
+      .update({ rating: rating });
+  }
 }

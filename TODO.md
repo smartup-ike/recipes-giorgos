@@ -1,1 +1,1 @@
-cloud functions emulator
+cloud functions rate recipe

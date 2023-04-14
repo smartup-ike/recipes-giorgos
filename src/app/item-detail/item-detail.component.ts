@@ -7,6 +7,9 @@ import { Subscription } from 'rxjs';
 import { ItemLinks } from '../models/item-links.model';
 import { ItemSummary } from '../models/item-summary.model';
 import { ItemComponent } from '../item/item.component';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-item-detail',
@@ -19,7 +22,10 @@ export class ItemDetailComponent implements OnInit {
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
-    private data: DataService
+    private data: DataService,
+    private functions: AngularFireFunctions,
+    private database: AngularFireDatabase,
+    private auth: AngularFireAuth
   ) {}
   //get item from sibling comp
   itemContent: ItemContent = {
@@ -40,8 +46,14 @@ export class ItemDetailComponent implements OnInit {
   url = '';
   subscription: Subscription = new Subscription();
   stars: Element[] = [];
+  itemID = '';
+  uid = '';
 
   ngOnInit(): void {
+    this.auth.user.subscribe((user) => {
+      this.uid = user?.uid!;
+    });
+
     const ratingStars = [document.querySelectorAll('.rating__star')];
 
     ratingStars[0].forEach((el) => {
@@ -73,7 +85,9 @@ export class ItemDetailComponent implements OnInit {
     //get the rest of the data
 
     this.route.paramMap.subscribe((params) => {
+      this.itemID = params.get('id')!;
       let id = params.get('id')!;
+
       this.api.getItemContent(id).subscribe((item) => {
         if (item) {
           this.itemContent.ingredients = item.ingredients;
@@ -92,6 +106,7 @@ export class ItemDetailComponent implements OnInit {
         }
       });
 
+      //show rating
       this.api.getRating(id).subscribe((rating) => {
         this.itemRating = rating?.rating!;
         this.itemRatingRounded = Math.round(
@@ -120,15 +135,29 @@ export class ItemDetailComponent implements OnInit {
   }
 
   rateRecipe(e: Event) {
-    let id: number = ((e.target as HTMLElement).id as unknown as number) - 1;
+    //id for displaying stars
+    let id: number = parseInt((e.target as HTMLElement).id) - 1;
+    //rating for database
+    let rating: number = parseInt((e.target as HTMLElement).id);
     const star = e.target as HTMLElement;
     const starClassActive = 'rating__star fas fa-star m-4 cursor-pointer';
     const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
     const starsLength = this.stars.length;
 
-    console.log(id);
+    // const rateRecipe$ = this.functions.httpsCallable('onRateRecipe');
+    // const ratingData = {
+    //   userRatingID: this.database.createPushId(),
+    //   rating: {
+    //     rating: rating,
+    //   },
+    //   itemID: this.itemID,
+    //   uid: this.uid,
+    // };
+    // let response = rateRecipe$(ratingData).subscribe(console.log);
 
-    if (id) {
+    this.api.updateItemRating(this.itemID, this.uid, rating);
+
+    if (id >= 0) {
       if (star.className === starClassInactive) {
         for (id; id >= 0; --id) {
           this.stars[id].className = starClassActive;
