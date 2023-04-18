@@ -5,7 +5,6 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ItemSummary } from '../models/item-summary.model';
 import { Subscription } from 'rxjs';
 import { DataService } from '../services/data.service';
-import { OptionKeys } from '../models/option-keys.mode';
 
 @Component({
   selector: 'app-category',

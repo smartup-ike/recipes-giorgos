@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { MenuOption } from '../models/menuOption.model';
-import { OptionKeys } from '../models/option-keys.mode';
 import { ItemSummary } from '../models/item-summary.model';
 import { ItemContent } from '../models/item-content.model';
 import { Comment } from '../models/comment.model';
@@ -18,8 +17,8 @@ export class ApiService {
     return this.db.list<MenuOption>('menu_options').valueChanges();
   }
 
-  getOptionKeys(path: string): Observable<OptionKeys | null> {
-    return this.db.object<OptionKeys>(path).valueChanges();
+  getOptionKeys(path: string): Observable<Record<string, boolean> | null> {
+    return this.db.object<Record<string, boolean>>(path).valueChanges();
   }
 
   getSummary(id: string): Observable<ItemSummary | null> {

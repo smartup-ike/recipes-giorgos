@@ -30,25 +30,69 @@ export const onRatingChange = functions.database
       //   await admin.database().ref(`item_ratings/${itemID}/userRatings/`).get()
       // ).val();
 
-      console.log(`before ${beforeRating}: after ${afterRating}`);
+      console.log(beforeRating);
+      console.log(afterRating);
+
+      const prevSum: number = (
+        await admin
+          .database()
+          .ref(`item_ratings/${itemID}/averageRatingData/sumOfRatings`)
+          .get()
+      ).val();
+
+      const ratingCount: number = (
+        await admin
+          .database()
+          .ref(`item_ratings/${itemID}/averageRatingData/ratingCount`)
+          .get()
+      ).val();
 
       if (!beforeRating) {
-        const ratingCount: number = (
-          await admin
-            .database()
-            .ref(`item_ratings/${itemID}/averageRatingData/ratingCount`)
-            .get()
-        ).val();
-
-        const newRating = {
+        const newRatingCount = {
           ratingCount: ratingCount + 1,
         };
+
+        const newSum = {
+          sumOfRatings: prevSum + afterRating.rating,
+        };
+
+        const newRating = {
+          rating: (newSum.sumOfRatings / newRatingCount.ratingCount).toString(),
+        };
+
+        admin
+          .database()
+          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .update(newRatingCount);
+
+        admin
+          .database()
+          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .update(newSum);
 
         admin
           .database()
           .ref(`item_ratings/${itemID}/averageRatingData/`)
           .update(newRating);
       }
+
+      const newSum = {
+        sumOfRatings: prevSum - beforeRating.rating + afterRating.rating,
+      };
+
+      const newRating = {
+        rating: (newSum.sumOfRatings / ratingCount).toString(),
+      };
+
+      admin
+        .database()
+        .ref(`item_ratings/${itemID}/averageRatingData/`)
+        .update(newRating);
+
+      admin
+        .database()
+        .ref(`item_ratings/${itemID}/averageRatingData/`)
+        .update(newSum);
 
       admin
         .database()
