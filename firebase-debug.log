@@ -1591,3 +1591,34 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 [info] i  functions: Finished "us-central1-onRatingChange" in 121.9043ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onRatingChange"},"extension":{},"message":"Finished \"us-central1-onRatingChange\" in 121.9043ms"}}
 [debug] [2023-04-18T07:16:43.501Z] [worker-us-central1-onRatingChange-751f4352-d06a-4b4f-9928-e0a184277803]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onRatingChange"},"extension":{},"message":"[worker-us-central1-onRatingChange-751f4352-d06a-4b4f-9928-e0a184277803]: IDLE"}}
 [debug] [2023-04-18T07:16:43.501Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2023-04-21T14:06:06.946Z] ----------------------------------------------------------------------
+[debug] [2023-04-21T14:06:06.950Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Vassilis\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2023-04-21T14:06:06.951Z] CLI Version:   11.25.3
+[debug] [2023-04-21T14:06:06.951Z] Platform:      win32
+[debug] [2023-04-21T14:06:06.951Z] Node Version:  v16.13.0
+[debug] [2023-04-21T14:06:06.952Z] Time:          Fri Apr 21 2023 17:06:06 GMT+0300 (Eastern European Summer Time)
+[debug] [2023-04-21T14:06:06.953Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-21T14:06:07.075Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-21T14:06:07.076Z] > authorizing via signed-in user (tsereteli@smartupweb.com)
+[debug] [2023-04-21T14:06:07.427Z] java version "20" 2023-03-21
+
+[debug] [2023-04-21T14:06:07.428Z] Java(TM) SE Runtime Environment (build 20+36-2344)
+Java HotSpot(TM) 64-Bit Server VM (build 20+36-2344, mixed mode, sharing)
+
+[debug] [2023-04-21T14:06:07.447Z] Parsed Java major version: 20
+[info] i  emulators: Starting emulators: functions, database {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, database"}}
+[debug] [2023-04-21T14:06:07.466Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-04-21T14:06:07.466Z] [database] Database Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-04-21T14:06:07.467Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"database":[{"address":"127.0.0.1","family":"IPv4","port":9000}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project smartup-hr-test-frontend. This may result in unexpected behavior. 
+[debug] [2023-04-21T14:06:07.475Z] [hub] writing locator at C:\Users\Vassilis\AppData\Local\Temp\hub-smartup-hr-test-frontend.json
+[debug] [2023-04-21T14:06:07.490Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-04-21T14:06:07.491Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-04-21T14:06:07.491Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"database":[{"address":"127.0.0.1","family":"IPv4","port":9000}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, hosting, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, hosting, pubsub, storage\u001b[22m"}}
+[debug] [2023-04-21T14:06:07.495Z] defaultcredentials: writing to file C:\Users\Vassilis\AppData\Roaming\firebase\tsereteli_smartupweb_com_application_default_credentials.json
+[debug] [2023-04-21T14:06:07.497Z] Setting GAC to C:\Users\Vassilis\AppData\Roaming\firebase\tsereteli_smartupweb_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Vassilis\\AppData\\Roaming\\firebase\\tsereteli_smartupweb_com_application_default_credentials.json"}}
+[debug] [2023-04-21T14:06:07.499Z] > refreshing access token with scopes: []
+[debug] [2023-04-21T14:06:07.502Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-04-21T14:06:07.502Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]

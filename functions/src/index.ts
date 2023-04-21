@@ -48,6 +48,8 @@ export const onRatingChange = functions.database
       ).val();
 
       if (!beforeRating) {
+        //OnCreate
+
         const newRatingCount = {
           ratingCount: ratingCount + 1,
         };
@@ -74,30 +76,34 @@ export const onRatingChange = functions.database
           .database()
           .ref(`item_ratings/${itemID}/averageRatingData/`)
           .update(newRating);
+      } else {
+
+        //OnUpdate
+        const newSum = {
+          sumOfRatings: prevSum - beforeRating.rating + afterRating.rating,
+        };
+
+        const newRating = {
+          rating: (newSum.sumOfRatings / ratingCount).toString(),
+        };
+
+        admin
+          .database()
+          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .update(newRating);
+
+        admin
+          .database()
+          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .update(newSum);
+
+        admin
+          .database()
+          .ref(`user_ratings/${uid}/itemRatings/${itemID}`)
+          .update(afterRating);
       }
 
-      const newSum = {
-        sumOfRatings: prevSum - beforeRating.rating + afterRating.rating,
-      };
 
-      const newRating = {
-        rating: (newSum.sumOfRatings / ratingCount).toString(),
-      };
-
-      admin
-        .database()
-        .ref(`item_ratings/${itemID}/averageRatingData/`)
-        .update(newRating);
-
-      admin
-        .database()
-        .ref(`item_ratings/${itemID}/averageRatingData/`)
-        .update(newSum);
-
-      admin
-        .database()
-        .ref(`user_ratings/${uid}/itemRatings/${itemID}`)
-        .update(afterRating);
     } catch (error) {
       console.log(error);
     }
