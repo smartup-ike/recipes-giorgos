@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../services/api.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 
-import { ItemSummary } from '../models/item-summary.model';
 import { Subscription } from 'rxjs';
-import { DataService } from '../services/data.service';
+import { ItemSummary } from '../models/item-summary.model';
 
 @Component({
   selector: 'app-category',
@@ -12,15 +11,18 @@ import { DataService } from '../services/data.service';
   styleUrls: ['./category.component.css'],
 })
 export class CategoryComponent implements OnInit {
-  constructor(private api: ApiService, private route: ActivatedRoute) {}
+  constructor(private api: ApiService, private route: ActivatedRoute) { }
 
   itemsArr: ItemSummary[] = [];
+  loading = false
 
   subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
+    this.loading = true
     this.route.paramMap.subscribe((params) => {
       let id = params.get('id');
+
 
       if (id) {
         this.api.getOptionKeys(id).subscribe((items) => {
@@ -34,7 +36,13 @@ export class CategoryComponent implements OnInit {
             });
           }
         });
+
+
       }
     });
+    this.loading = false
+
+
+
   }
 }

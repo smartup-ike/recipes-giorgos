@@ -2,8 +2,8 @@ import * as admin from 'firebase-admin';
 import { HandlerData } from '../models/handlerData.model';
 
 export const postCommentsHandler = async (data: HandlerData) => {
-  const itemID = data.itemID;
-  const reviewID = data.reviewID;
+  const itemId = data.itemId;
+  const reviewId = data.reviewId;
   const review = data.review;
 
   if (!review.text) {
@@ -14,8 +14,8 @@ export const postCommentsHandler = async (data: HandlerData) => {
     review.author.name = 'anonymous';
   }
 
-  return admin
+  return await admin
     .database()
-    .ref(`item_reviews/${itemID}/${reviewID}`)
-    .update(review);
+    .ref(`item_reviews/${itemId}/${reviewId}`)
+    .set(review);
 };

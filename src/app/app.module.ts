@@ -42,8 +42,8 @@ import { USE_EMULATOR as USE_DATABASE_EMULATORS } from '@angular/fire/compat/dat
   ],
   providers: [
     { provide: USE_FUNCTIONS_EMULATORS, useValue: ['localhost', 5001] },
-    { provide: USE_DATABASE_EMULATORS, useValue: ['localhost', 9000] },
+    // { provide: USE_DATABASE_EMULATORS, useValue: ['localhost', 9000] },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -18,6 +18,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class ItemDetailComponent implements OnInit {
   isRated = false;
+  imageLoaded = false
+  imgPathExists = true
 
   constructor(
     private api: ApiService,
@@ -26,7 +28,7 @@ export class ItemDetailComponent implements OnInit {
     private functions: AngularFireFunctions,
     private database: AngularFireDatabase,
     private auth: AngularFireAuth
-  ) {}
+  ) { }
   //get item from sibling comp
   itemContent: ItemContent = {
     ingredients: [],
@@ -49,7 +51,12 @@ export class ItemDetailComponent implements OnInit {
   itemID = '';
   uid = '';
 
+
+
+
   ngOnInit(): void {
+    console.log(2);
+
     this.auth.user.subscribe((user) => {
       this.uid = user?.uid!;
     });
@@ -69,16 +76,25 @@ export class ItemDetailComponent implements OnInit {
           this.api.getSummary(id).subscribe((summary) => {
             this.itemSummary = summary as ItemSummary;
 
-            this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
-            this.data.changeID(summary?.title as string);
+            if (summary?.image_path) {
+              this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
+            }
+
+            this.data.changeId(summary?.title as string);
           });
         });
       } else {
         //when navigating with button
         this.itemSummary = item;
 
-        this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${item.image_path}?alt=media`;
-        this.data.changeID(item.title);
+        if (item?.image_path) {
+          this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${item?.image_path}?alt=media`;
+        } else {
+          this.imgPathExists = false
+        }
+
+
+        this.data.changeId(item.title);
       }
     });
 
@@ -144,16 +160,7 @@ export class ItemDetailComponent implements OnInit {
     const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
     const starsLength = this.stars.length;
 
-    // const rateRecipe$ = this.functions.httpsCallable('onRateRecipe');
-    // const ratingData = {
-    //   userRatingID: this.database.createPushId(),
-    //   rating: {
-    //     rating: rating,
-    //   },
-    //   itemID: this.itemID,
-    //   uid: this.uid,
-    // };
-    // let response = rateRecipe$(ratingData).subscribe(console.log);
+
 
     this.api.updateItemRating(this.itemID, this.uid, rating);
 
@@ -172,4 +179,14 @@ export class ItemDetailComponent implements OnInit {
       }
     }
   }
+
+
+
+  logLoad(): void {
+    this.imageLoaded = true
+    console.log(1);
+
+  }
+
 }
+

@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class CategoriesComponent implements OnInit {
   menu: MenuOption[] = [];
-  constructor(public api: ApiService, private data: DataService) {}
+  constructor(public api: ApiService, private data: DataService) { }
 
   ngOnInit(): void {
     this.api
@@ -29,13 +29,13 @@ export class CategoriesComponent implements OnInit {
       });
   }
 
-  changeIDAndPath(title: string, path: string) {
-    this.changeID(title);
+  changeIdAndPath(title: string, path: string) {
+    this.changeId(title);
     this.changePath(path);
   }
 
-  changeID(title: string) {
-    this.data.changeID(title);
+  changeId(title: string) {
+    this.data.changeId(title);
   }
 
   changePath(path: string) {

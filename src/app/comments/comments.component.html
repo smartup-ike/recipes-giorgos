@@ -4,9 +4,7 @@
     </div>
     <div class="flex flex-col w-full ">
         <div *ngFor="let comment of comments">
-            <app-comment [text]="comment.text" [id]="comment.id" [authorUid]="comment.authorUid"
-                [name]="comment.author.name" [email]="comment.author.email" [imageUrl]="comment.author.imageUrl"
-                [timestamp]="comment.timestamp"></app-comment>
+            <app-comment [comment]="comment"></app-comment>
         </div>
     </div>
 </div>

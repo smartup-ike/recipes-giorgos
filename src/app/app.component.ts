@@ -14,16 +14,15 @@ export class AppComponent implements OnInit {
     private data: DataService,
     private route: ActivatedRoute,
     private _location: Location
-  ) {}
+  ) { }
 
   title = '';
 
-  subscription: Subscription = new Subscription();
+  subscription?: Subscription;
 
   ngOnInit(): void {
-    this.subscription = this.data.currentID.subscribe(
-      (id) => (this.title = id)
-    );
+    this.subscription = this.data.currentId.subscribe(id => this.title = id)
+
   }
 
   goBack() {

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Comment } from '../models/comment.model';
 
 @Component({
   selector: 'app-comment',
@@ -6,16 +7,11 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./comment.component.css'],
 })
 export class CommentComponent implements OnInit {
-  @Input() text = '';
-  @Input() email = '';
-  @Input() imageUrl = '';
-  @Input() name = '';
-  @Input() authorUid = '';
-  @Input() timestamp = 0;
-  @Input() id = '';
+  @Input() comment!: Comment;
+
   date: Date | undefined;
 
   ngOnInit(): void {
-    this.date = new Date(this.timestamp);
+    this.date = new Date(this.comment.timestamp);
   }
 }

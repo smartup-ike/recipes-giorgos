@@ -15,20 +15,13 @@ export const helloWorld = functions.https.onRequest((request, response) => {
 
 export const onPostComment = functions.https.onCall(postCommentsHandler);
 export const onRatingChange = functions.database
-  .ref('item_ratings/{itemID}/userRatings/{uid}')
+  .ref('item_ratings/{itemId}/userRatings/{uid}')
   .onWrite(async (change, context) => {
     try {
-      const itemID = context.params.itemID;
+      const itemId = context.params.itemId;
       const uid = context.params.uid;
       const afterRating = change.after.val();
       const beforeRating = change.before.val();
-      // const userRatings = await (
-      //   await admin.database().ref(`item_ratings/${itemID}/userRatings`).get()
-      // ).val();
-
-      // const usersCount = (
-      //   await admin.database().ref(`item_ratings/${itemID}/userRatings/`).get()
-      // ).val();
 
       console.log(beforeRating);
       console.log(afterRating);
@@ -36,14 +29,14 @@ export const onRatingChange = functions.database
       const prevSum: number = (
         await admin
           .database()
-          .ref(`item_ratings/${itemID}/averageRatingData/sumOfRatings`)
+          .ref(`item_ratings/${itemId}/averageRatingData/sumOfRatings`)
           .get()
       ).val();
 
       const ratingCount: number = (
         await admin
           .database()
-          .ref(`item_ratings/${itemID}/averageRatingData/ratingCount`)
+          .ref(`item_ratings/${itemId}/averageRatingData/ratingCount`)
           .get()
       ).val();
 
@@ -64,17 +57,17 @@ export const onRatingChange = functions.database
 
         admin
           .database()
-          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .ref(`item_ratings/${itemId}/averageRatingData/`)
           .update(newRatingCount);
 
         admin
           .database()
-          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .ref(`item_ratings/${itemId}/averageRatingData/`)
           .update(newSum);
 
         admin
           .database()
-          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .ref(`item_ratings/${itemId}/averageRatingData/`)
           .update(newRating);
       } else {
 
@@ -89,17 +82,17 @@ export const onRatingChange = functions.database
 
         admin
           .database()
-          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .ref(`item_ratings/${itemId}/averageRatingData/`)
           .update(newRating);
 
         admin
           .database()
-          .ref(`item_ratings/${itemID}/averageRatingData/`)
+          .ref(`item_ratings/${itemId}/averageRatingData/`)
           .update(newSum);
 
         admin
           .database()
-          .ref(`user_ratings/${uid}/itemRatings/${itemID}`)
+          .ref(`user_ratings/${uid}/itemRatings/${itemId}`)
           .update(afterRating);
       }
 

@@ -14,13 +14,13 @@ export class DataService {
     image_path: '',
     description: '',
   });
-  currentID = this.id.asObservable();
-  currentPath = this.path.asObservable();
-  currentItem = this.item.asObservable();
+  currentId = this.id
+  currentPath = this.path
+  currentItem = this.item
 
-  constructor() {}
+  constructor() { }
 
-  changeID(id: string) {
+  changeId(id: string) {
     this.id.next(id);
   }
 

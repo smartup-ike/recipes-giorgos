@@ -17,7 +17,7 @@ export class PostCommentComponent implements OnInit {
     private auth: AngularFireAuth,
     private functions: AngularFireFunctions,
     private database: AngularFireDatabase
-  ) {}
+  ) { }
 
   text: FormControl = new FormControl('', [
     Validators.required,
@@ -26,7 +26,7 @@ export class PostCommentComponent implements OnInit {
   email: string = '';
   uid: string = '';
   name: string = '';
-  itemID: string = '';
+  itemId: string = '';
 
   isLoading = false;
   isError = false;
@@ -49,7 +49,7 @@ export class PostCommentComponent implements OnInit {
     });
 
     this.route.paramMap.subscribe((param) => {
-      this.itemID = param.get('id')!;
+      this.itemId = param.get('id')!;
     });
   }
 
@@ -74,8 +74,8 @@ export class PostCommentComponent implements OnInit {
 
     const handlerData = {
       review: review,
-      reviewID: this.database.createPushId(),
-      itemID: this.itemID,
+      reviewId: this.database.createPushId(),
+      itemId: this.itemId,
     };
 
     const comment$ = this.functions.httpsCallable('onPostComment');
