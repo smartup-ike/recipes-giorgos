@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../services/api.service';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { ActivatedRoute } from '@angular/router';
-import { ItemContent } from '../models/item-content.model';
-import { DataService } from '../services/data.service';
 import { Subscription } from 'rxjs';
+import { ItemContent } from '../models/item-content.model';
 import { ItemLinks } from '../models/item-links.model';
 import { ItemSummary } from '../models/item-summary.model';
-import { ItemComponent } from '../item/item.component';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { ApiService } from '../services/api.service';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-item-detail',
@@ -51,12 +50,7 @@ export class ItemDetailComponent implements OnInit {
   itemID = '';
   uid = '';
 
-
-
-
   ngOnInit(): void {
-    console.log(2);
-
     this.auth.user.subscribe((user) => {
       this.uid = user?.uid!;
     });
@@ -92,8 +86,6 @@ export class ItemDetailComponent implements OnInit {
         } else {
           this.imgPathExists = false
         }
-
-
         this.data.changeId(item.title);
       }
     });
@@ -160,8 +152,6 @@ export class ItemDetailComponent implements OnInit {
     const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
     const starsLength = this.stars.length;
 
-
-
     this.api.updateItemRating(this.itemID, this.uid, rating);
 
     if (id >= 0) {
@@ -180,13 +170,7 @@ export class ItemDetailComponent implements OnInit {
     }
   }
 
-
-
   logLoad(): void {
     this.imageLoaded = true
-    console.log(1);
-
   }
-
 }
-

@@ -11,17 +11,15 @@ export class ItemComponent implements OnInit {
   constructor(private data: DataService) { }
 
   isHidden = true;
-  imagesLoaded = false
+  imagesLoaded = false;
 
   @Input() item!: ItemSummary;
   url: string = '';
 
 
   setHidden(e: Event) {
-    e.stopPropagation()
     this.isHidden = !this.isHidden;
   }
-
 
   changeItem(item: ItemSummary) {
     this.data.changeItem(item);
@@ -32,16 +30,11 @@ export class ItemComponent implements OnInit {
       this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${this.item.image_path}?alt=media`;
 
     } else {
-      this.imagesLoaded = true
+      this.imagesLoaded = true;
     }
-
   }
 
   logLoad(): void {
-    this.imagesLoaded = true
-    console.log(this.item.title);
-
-
+    this.imagesLoaded = true;
   }
-
 }

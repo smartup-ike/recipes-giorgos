@@ -11,18 +11,17 @@ import { ItemSummary } from '../models/item-summary.model';
   styleUrls: ['./category.component.css'],
 })
 export class CategoryComponent implements OnInit {
-  constructor(private api: ApiService, private route: ActivatedRoute) { }
+  constructor(private api: ApiService, private route: ActivatedRoute) {}
 
   itemsArr: ItemSummary[] = [];
-  loading = false
+  isLoading = false;
 
   subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-    this.loading = true
+    this.isLoading = true;
     this.route.paramMap.subscribe((params) => {
       let id = params.get('id');
-
 
       if (id) {
         this.api.getOptionKeys(id).subscribe((items) => {
@@ -36,13 +35,8 @@ export class CategoryComponent implements OnInit {
             });
           }
         });
-
-
       }
     });
-    this.loading = false
-
-
-
+    this.isLoading = false;
   }
 }

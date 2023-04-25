@@ -12,18 +12,16 @@ import { Subscription } from 'rxjs';
 })
 export class CategoriesComponent implements OnInit {
   menu: MenuOption[] = [];
-  constructor(public api: ApiService, private data: DataService) { }
+  constructor(private api: ApiService, private data: DataService) { }
 
   ngOnInit(): void {
-    this.api
-      .getMenuOptions()
-      .pipe(
-        map((category) =>
-          category.filter(
-            (category: { title: string }) => category.title !== 'test'
-          )
+    this.api.getMenuOptions().pipe(
+      map((category) =>
+        category.filter(
+          (category: { title: string }) => category.title !== 'test'
         )
       )
+    )
       .subscribe((res) => {
         this.menu = res;
       });

@@ -3,14 +3,10 @@
         <div class="left-side w-2/6 mr-8">
             <div *ngIf="!imageLoaded">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921" alt="">
-
             </div>
-
-
             <div *ngIf="imgPathExists; else placeholder">
                 <img [src]="url" alt="" (load)="logLoad()" class="img mb-8 mr-8">
             </div>
-
             <div>
                 <p class="font-bold mb-8 mr-8">{{itemSummary.title}}</p>
                 <p class="mb-8 mr-8">{{itemSummary.description}}</p>
@@ -44,9 +40,7 @@
             </div>
         </div>
     </div>
-
     <app-comments></app-comments>
-
 </div>
 
 <ng-template #placeholder>

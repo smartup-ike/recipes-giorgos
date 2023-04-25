@@ -2,7 +2,6 @@
     <div class="item-width bg-white">
         <div *ngIf="!imagesLoaded">
             <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921" alt="">
-
         </div>
         <div *ngIf="item.image_path; else placeholder">
             <img [src]="url" alt="" (load)="logLoad()" class="img-width">
@@ -10,7 +9,7 @@
 
         <div class="flex place-content-between items-center font-bold mb-2">
             <p class="p-8 ">{{item.title}}</p>
-            <p (click)="setHidden($event)" class="cursor-pointer min-w-fit">
+            <p class="cursor-pointer min-w-fit">
                 <img *ngIf="isHidden" src="assets/arrow_right.png" alt="">
                 <img *ngIf="!isHidden" src="assets/arrow_down.png" alt="">
             </p>

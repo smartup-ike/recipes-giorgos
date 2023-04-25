@@ -18,10 +18,9 @@ export class AppComponent implements OnInit {
 
   title = '';
 
-  subscription?: Subscription;
 
   ngOnInit(): void {
-    this.subscription = this.data.currentId.subscribe(id => this.title = id)
+    this.data.currentId.subscribe(id => this.title = id)
 
   }
 
