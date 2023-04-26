@@ -8,11 +8,11 @@ export const onRatingCreateHandler = async (snap: DataSnapshot, context: functio
         const itemId = context.params.itemId;
         const uid = context.params.uid;
 
-        const averageRatingDataSnapshot = admin.database().ref(`item_ratings/${itemId}/averageRatingData/`).get();
-        const newUserRatingSnapshot = admin.database().ref(`item_ratings/${itemId}/userRatings/${uid}`).get();
+        const getAverageRatingData = admin.database().ref(`item_ratings/${itemId}/averageRatingData`).get();
+        const getNewUserRating = admin.database().ref(`item_ratings/${itemId}/userRatings/${uid}`).get();
 
-        const averageRatingData: AverageRating = (await averageRatingDataSnapshot).val();
-        const newRatingData = (await newUserRatingSnapshot).val();
+        const averageRatingData: AverageRating = (await getAverageRatingData).val();
+        const newRatingData = (await getNewUserRating).val();
 
         const newSum = averageRatingData.sumOfRatings + newRatingData.rating;
         const newRatingCount = averageRatingData.ratingCount + 1;
@@ -23,7 +23,7 @@ export const onRatingCreateHandler = async (snap: DataSnapshot, context: functio
             rating: (newSum / newRatingCount).toString()
         };
 
-        await admin.database().ref(`item_ratings/${itemId}/averageRatingData/`).update(newRatingObj)
+        await admin.database().ref(`item_ratings/${itemId}/averageRatingData/`).set(newRatingObj)
 
     } catch (e) {
         console.log(e);

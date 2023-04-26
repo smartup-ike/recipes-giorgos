@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.data.currentId.subscribe(id => this.title = id)
+    this.data.currentId.subscribe(title => this.title = title)
 
   }
 

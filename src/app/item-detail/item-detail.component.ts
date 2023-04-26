@@ -173,4 +173,5 @@ export class ItemDetailComponent implements OnInit {
   logLoad(): void {
     this.imageLoaded = true
   }
+
 }

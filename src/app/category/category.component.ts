@@ -11,15 +11,14 @@ import { ItemSummary } from '../models/item-summary.model';
   styleUrls: ['./category.component.css'],
 })
 export class CategoryComponent implements OnInit {
-  constructor(private api: ApiService, private route: ActivatedRoute) {}
+  constructor(private api: ApiService, private route: ActivatedRoute) { }
 
-  itemsArr: ItemSummary[] = [];
-  isLoading = false;
+  itemsArr?: ItemSummary[];
 
   subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-    this.isLoading = true;
+
     this.route.paramMap.subscribe((params) => {
       let id = params.get('id');
 
@@ -31,12 +30,11 @@ export class CategoryComponent implements OnInit {
             this.api.getSummary(item).subscribe((summary) => {
               (summary as ItemSummary).id = item;
 
-              this.itemsArr.push(summary as ItemSummary);
+              this.itemsArr?.push(summary as ItemSummary);
             });
           }
         });
       }
     });
-    this.isLoading = false;
   }
 }
