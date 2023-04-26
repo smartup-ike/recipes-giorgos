@@ -14,6 +14,6 @@ export const postCommentsHandler = async (data: HandlerData) => {
     review.author.name = 'anonymous';
   }
 
-  await admin.database().ref(`item_reviews/${itemId}/${reviewId}`).set(review);
+  return await admin.database().ref(`item_reviews/${itemId}/${reviewId}`).set(review);
 
 };
