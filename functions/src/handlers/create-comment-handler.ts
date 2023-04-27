@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import { HandlerData } from '../models/handlerData.model';
+import { https } from 'firebase-functions/v1';
 
 export const postCommentsHandler = async (data: HandlerData) => {
   const itemId = data.itemId;
@@ -7,13 +8,15 @@ export const postCommentsHandler = async (data: HandlerData) => {
   const review = data.review;
 
   if (!review.text) {
-    return { error: 'text string cannot be empty' };
+    return new https.HttpsError('invalid-argument', 'cannot post empty comment');
   }
 
   if (!review.author.name) {
     review.author.name = 'anonymous';
   }
 
-  return await admin.database().ref(`item_reviews/${itemId}/${reviewId}`).set(review);
+  await admin.database().ref(`item_reviews/${itemId}/${reviewId}`).set(review);
+
+  return { status: 'ok' };
 
 };

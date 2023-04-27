@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { DataService } from './services/data.service';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DataService } from './services/data.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +19,7 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.data.currentId.subscribe(title => this.title = title)
+    this.data.currentTitle.subscribe(title => this.title = title)
 
   }
 

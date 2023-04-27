@@ -6,7 +6,7 @@ import { ItemSummary } from '../models/item-summary.model';
   providedIn: 'root',
 })
 export class DataService {
-  private id = new BehaviorSubject('Επιλεξε μενου');
+  private title = new BehaviorSubject('Επιλεξε μενου');
   private path = new BehaviorSubject('');
   private item = new BehaviorSubject<ItemSummary>({
     id: '',
@@ -14,14 +14,14 @@ export class DataService {
     image_path: '',
     description: '',
   });
-  currentId = this.id
+  currentTitle = this.title
   currentPath = this.path
   currentItem = this.item
 
   constructor() { }
 
-  changeId(id: string) {
-    this.id.next(id);
+  changeId(title: string) {
+    this.title.next(title);
   }
 
   changePath(path: string) {

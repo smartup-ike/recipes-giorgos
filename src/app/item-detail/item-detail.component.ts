@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest, of, switchMap } from 'rxjs';
 import { ItemContent } from '../models/item-content.model';
 import { ItemLinks } from '../models/item-links.model';
 import { ItemSummary } from '../models/item-summary.model';
@@ -65,18 +65,20 @@ export class ItemDetailComponent implements OnInit {
     this.subscription = this.data.currentItem.subscribe((item) => {
       //on refresh
       if (!item.id) {
-        this.route.paramMap.subscribe((params) => {
-          let id = params.get('id')!;
-          this.api.getSummary(id).subscribe((summary) => {
-            this.itemSummary = summary as ItemSummary;
+        const paramMap$ = this.route.paramMap;
+        paramMap$.pipe(switchMap(params => {
+          const id = params.get('id')!;
 
-            if (summary?.image_path) {
-              this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
-            }
+          return this.api.getSummary(id);
+        })).subscribe(summary => {
+          this.itemSummary = summary as ItemSummary
 
-            this.data.changeId(summary?.title as string);
-          });
-        });
+          if (summary?.image_path) {
+            this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
+          }
+
+          this.data.changeId(summary?.title as string);
+        })
       } else {
         //when navigating with button
         this.itemSummary = item;
@@ -92,30 +94,40 @@ export class ItemDetailComponent implements OnInit {
 
     //get the rest of the data
 
-    this.route.paramMap.subscribe((params) => {
-      this.itemID = params.get('id')!;
-      let id = params.get('id')!;
 
-      this.api.getItemContent(id).subscribe((item) => {
-        if (item) {
-          this.itemContent.ingredients = item.ingredients;
-          this.itemContent.instructions = item.instructions;
-        }
-      });
-      this.api.getItemWebsiteUrl(id).subscribe((websiteUrl) => {
-        if (websiteUrl) {
-          this.itemLinks.websiteUrl = websiteUrl;
-        }
-      });
 
-      this.api.getItemYoutubeUrl(id).subscribe((youtubeUrl) => {
-        if (youtubeUrl) {
-          this.itemLinks.youtubeUrl = youtubeUrl;
-        }
-      });
+    const paramMap$ = this.route.paramMap;
 
-      //show rating
-      this.api.getRating(id).subscribe((rating) => {
+    paramMap$.pipe(switchMap(params => {
+      const id = params.get('id');
+      if (!id) {
+        return of([])
+      }
+
+      this.itemID = id;
+
+      const getItemContent$ = this.api.getItemContent(id)
+      const getItemWebsiteUrl$ = this.api.getItemWebsiteUrl(id)
+      const getItemYoutubeUrl$ = this.api.getItemYoutubeUrl(id)
+      const getRating$ = this.api.getRating(id)
+
+      return combineLatest([getItemContent$, getItemWebsiteUrl$, getItemYoutubeUrl$, getRating$])
+
+    })).subscribe(([item, websiteUrl, youtubeUrl, rating]) => {
+      if (item) {
+        this.itemContent.ingredients = item.ingredients;
+        this.itemContent.instructions = item.instructions;
+      }
+
+      if (websiteUrl) {
+        this.itemLinks.websiteUrl = websiteUrl;
+      }
+
+      if (youtubeUrl) {
+        this.itemLinks.youtubeUrl = youtubeUrl;
+      }
+
+      if (rating) {
         this.itemRating = rating?.rating!;
         this.itemRatingRounded = Math.round(
           rating?.rating as unknown as number
@@ -138,8 +150,9 @@ export class ItemDetailComponent implements OnInit {
             }
           }
         });
-      });
-    });
+      }
+    })
+
   }
 
   rateRecipe(e: Event) {
