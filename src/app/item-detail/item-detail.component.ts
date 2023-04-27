@@ -61,41 +61,6 @@ export class ItemDetailComponent implements OnInit {
       this.stars.push(el);
     });
 
-    //get item summary
-    this.subscription = this.data.currentItem.subscribe((item) => {
-      //on refresh
-      if (!item.id) {
-        const paramMap$ = this.route.paramMap;
-        paramMap$.pipe(switchMap(params => {
-          const id = params.get('id')!;
-
-          return this.api.getSummary(id);
-        })).subscribe(summary => {
-          this.itemSummary = summary as ItemSummary
-
-          if (summary?.image_path) {
-            this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
-          }
-
-          this.data.changeId(summary?.title as string);
-        })
-      } else {
-        //when navigating with button
-        this.itemSummary = item;
-
-        if (item?.image_path) {
-          this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${item?.image_path}?alt=media`;
-        } else {
-          this.imgPathExists = false
-        }
-        this.data.changeId(item.title);
-      }
-    });
-
-    //get the rest of the data
-
-
-
     const paramMap$ = this.route.paramMap;
 
     paramMap$.pipe(switchMap(params => {
@@ -110,10 +75,10 @@ export class ItemDetailComponent implements OnInit {
       const getItemWebsiteUrl$ = this.api.getItemWebsiteUrl(id)
       const getItemYoutubeUrl$ = this.api.getItemYoutubeUrl(id)
       const getRating$ = this.api.getRating(id)
+      const getSummary$ = this.api.getSummary(id);
 
-      return combineLatest([getItemContent$, getItemWebsiteUrl$, getItemYoutubeUrl$, getRating$])
-
-    })).subscribe(([item, websiteUrl, youtubeUrl, rating]) => {
+      return combineLatest([getItemContent$, getItemWebsiteUrl$, getItemYoutubeUrl$, getRating$, getSummary$])
+    })).subscribe(([item, websiteUrl, youtubeUrl, rating, summary]) => {
       if (item) {
         this.itemContent.ingredients = item.ingredients;
         this.itemContent.instructions = item.instructions;
@@ -150,6 +115,16 @@ export class ItemDetailComponent implements OnInit {
             }
           }
         });
+      }
+
+      if (summary) {
+        this.itemSummary = summary as ItemSummary
+
+        if (summary?.image_path) {
+          this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
+        }
+
+        this.data.changeId(summary?.title as string);
       }
     })
 
