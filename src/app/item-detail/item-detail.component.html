@@ -1,12 +1,15 @@
-<div>
+<div *ngIf="item">
     <div class="detail-flex-wrapper ">
         <div class="left-side w-2/6 mr-8">
-            <div>
-                <img [src]="url" alt="" class="img mb-8 mr-8">
+            <div *ngIf="!imageLoaded">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921" alt="">
+            </div>
+            <div *ngIf="item.url; else placeholder">
+                <img [src]="item.url" alt="" (load)="logLoad()" class="img mb-8 mr-8">
             </div>
             <div>
-                <p class="font-bold mb-8 mr-8">{{itemSummary.title}}</p>
-                <p class="mb-8 mr-8">{{itemSummary.description}}</p>
+                <p class="font-bold mb-8 mr-8">{{item.title}}</p>
+                <p class="mb-8 mr-8">{{item.description}}</p>
             </div>
             <div>
                 <div (click)="rateRecipe($event)" class="flex mb-8 justify-center font-bold">
@@ -18,26 +21,28 @@
                 </div>
             </div>
             <div class="flex justify-center">
-                <a [href]="itemLinks.websiteUrl"><img src="assets/website.png" alt="" width="50px" class="mr-8"></a>
-                <a [href]="itemLinks.youtubeUrl"><img src="assets/youtube.png" alt="" width="50px" class="mr-8"></a>
+                <a [href]="item.websiteUrl"><img src="assets/website.png" alt="" width="50px" class="mr-8"></a>
+                <a [href]="item.youtubeUrl"><img src="assets/youtube.png" alt="" width="50px" class="mr-8"></a>
             </div>
         </div>
         <div class="overflow max-height">
             <div class="mb-8 mr-8">
                 <p class="font-bold mb-8 mr-8">Υλικα</p>
-                <ul *ngFor="let nt of itemContent.ingredients" class=" mb-2 mr-8">
+                <ul *ngFor="let nt of item.ingredients" class=" mb-2 mr-8">
                     <li>{{nt}}</li>
                 </ul>
             </div>
             <div>
                 <p class="font-bold mb-8s mr-8">Οδηγιες εκτελεσης</p>
-                <ul *ngFor="let inst of itemContent.instructions">
+                <ul *ngFor="let inst of item.instructions">
                     <li>{{inst}}</li>
                 </ul>
             </div>
         </div>
     </div>
-
     <app-comments></app-comments>
-
 </div>
+
+<ng-template #placeholder>
+    <img src="https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png" alt="">
+</ng-template>

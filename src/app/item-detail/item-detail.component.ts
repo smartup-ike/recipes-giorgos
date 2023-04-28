@@ -1,53 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../services/api.service';
-import { ActivatedRoute } from '@angular/router';
-import { ItemContent } from '../models/item-content.model';
-import { DataService } from '../services/data.service';
-import { Subscription } from 'rxjs';
-import { ItemLinks } from '../models/item-links.model';
-import { ItemSummary } from '../models/item-summary.model';
-import { ItemComponent } from '../item/item.component';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription, of, switchMap } from 'rxjs';
+import { Item } from '../models/item.model';
+import { ApiService } from '../services/api.service';
+import { DataService } from '../services/data.service';
+import { ItemService } from '../services/item.service';
 
 @Component({
   selector: 'app-item-detail',
   templateUrl: './item-detail.component.html',
   styleUrls: ['./item-detail.component.css'],
 })
-export class ItemDetailComponent implements OnInit {
+export class ItemDetailComponent implements OnInit, OnDestroy {
   isRated = false;
+  imageLoaded = false;
 
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
-    private data: DataService,
-    private functions: AngularFireFunctions,
-    private database: AngularFireDatabase,
-    private auth: AngularFireAuth
-  ) {}
+    private itemService: ItemService,
+    private auth: AngularFireAuth,
+    private data: DataService
+  ) { }
   //get item from sibling comp
-  itemContent: ItemContent = {
-    ingredients: [],
-    instructions: [],
-  };
-  itemLinks: ItemLinks = {
-    websiteUrl: '',
-    youtubeUrl: '',
-  };
-  itemSummary: ItemSummary = {
-    id: '',
-    title: '',
-  };
+
 
   itemRating = '';
   itemRatingRounded = 0;
-  url = '';
-  subscription: Subscription = new Subscription();
+  subscription?: Subscription;
   stars: Element[] = [];
-  itemID = '';
+  itemId = '';
   uid = '';
+
+  item?: Item;
+
 
   ngOnInit(): void {
     this.auth.user.subscribe((user) => {
@@ -60,60 +47,41 @@ export class ItemDetailComponent implements OnInit {
       this.stars.push(el);
     });
 
-    //get item summary
-    this.subscription = this.data.currentItem.subscribe((item) => {
-      //on refresh
-      if (!item.id) {
-        this.route.paramMap.subscribe((params) => {
-          let id = params.get('id')!;
-          this.api.getSummary(id).subscribe((summary) => {
-            this.itemSummary = summary as ItemSummary;
+    const paramMap$ = this.route.paramMap;
 
-            this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
-            this.data.changeID(summary?.title as string);
-          });
-        });
-      } else {
-        //when navigating with button
-        this.itemSummary = item;
-
-        this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${item.image_path}?alt=media`;
-        this.data.changeID(item.title);
+    paramMap$.pipe(switchMap(params => {
+      const id = params.get('id');
+      if (!id) {
+        return of();
       }
+
+      return this.itemService.getItem(id);
+
+    })).subscribe(item => {
+      this.item = item;
+      if (!item.url) this.imageLoaded = true;
     });
 
-    //get the rest of the data
 
-    this.route.paramMap.subscribe((params) => {
-      this.itemID = params.get('id')!;
-      let id = params.get('id')!;
 
-      this.api.getItemContent(id).subscribe((item) => {
-        if (item) {
-          this.itemContent.ingredients = item.ingredients;
-          this.itemContent.instructions = item.instructions;
-        }
-      });
-      this.api.getItemWebsiteUrl(id).subscribe((websiteUrl) => {
-        if (websiteUrl) {
-          this.itemLinks.websiteUrl = websiteUrl;
-        }
-      });
 
-      this.api.getItemYoutubeUrl(id).subscribe((youtubeUrl) => {
-        if (youtubeUrl) {
-          this.itemLinks.youtubeUrl = youtubeUrl;
-        }
-      });
+    this.subscription = paramMap$.pipe(switchMap(params => {
+      const id = params.get('id');
+      if (!id) {
+        return of();
+      }
 
-      //show rating
-      this.api.getRating(id).subscribe((rating) => {
-        this.itemRating = rating?.rating!;
+      this.itemId = id;
+
+      return this.api.getRating(id);
+    })).subscribe((ratings) => {
+      if (ratings) {
+        this.itemRating = ratings?.rating;
         this.itemRatingRounded = Math.round(
-          rating?.rating as unknown as number
+          ratings?.rating as unknown as number
         );
 
-        let id: number = Math.round(rating?.rating as unknown as number);
+        let id: number = Math.round(ratings?.rating as unknown as number);
 
         const starClassActive = 'rating__star fas fa-star m-4 cursor-pointer';
         const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
@@ -130,7 +98,7 @@ export class ItemDetailComponent implements OnInit {
             }
           }
         });
-      });
+      }
     });
   }
 
@@ -144,18 +112,7 @@ export class ItemDetailComponent implements OnInit {
     const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
     const starsLength = this.stars.length;
 
-    // const rateRecipe$ = this.functions.httpsCallable('onRateRecipe');
-    // const ratingData = {
-    //   userRatingID: this.database.createPushId(),
-    //   rating: {
-    //     rating: rating,
-    //   },
-    //   itemID: this.itemID,
-    //   uid: this.uid,
-    // };
-    // let response = rateRecipe$(ratingData).subscribe(console.log);
-
-    this.api.updateItemRating(this.itemID, this.uid, rating);
+    this.api.updateItemRating(this.itemId, this.uid, rating);
 
     if (id >= 0) {
       if (star.className === starClassInactive) {
@@ -172,4 +129,13 @@ export class ItemDetailComponent implements OnInit {
       }
     }
   }
+
+  logLoad(): void {
+    this.imageLoaded = true;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
+
 }

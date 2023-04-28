@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { ActivatedRoute } from '@angular/router';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { timestamp } from 'rxjs';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-post-comment',
@@ -17,16 +16,30 @@ export class PostCommentComponent implements OnInit {
     private auth: AngularFireAuth,
     private functions: AngularFireFunctions,
     private database: AngularFireDatabase
-  ) {}
+  ) { }
 
   text: FormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3),
   ]);
-  email: string = '';
-  uid: string = '';
-  name: string = '';
-  itemID: string = '';
+
+  review = {
+    author: {
+      email: '',
+      imageUrl: '',
+      name: '',
+      uid: '',
+    },
+    authorUid: '',
+    text: '',
+    timestamp: new Date().getTime(),
+  };
+
+  handlerData = {
+    review: this.review,
+    reviewId: this.database.createPushId(),
+    itemId: '',
+  };
 
   isLoading = false;
   isError = false;
@@ -41,15 +54,18 @@ export class PostCommentComponent implements OnInit {
 
   ngOnInit(): void {
     this.auth.user.subscribe((user) => {
-      if (user) {
-        this.email = user.email ?? 'anonymous';
-        this.uid = user.uid;
-        this.name = user.displayName ?? 'anonymous';
+      if (!user) {
+        return;
       }
+
+      this.review.author.email = user.email ?? 'anonymous';
+      this.review.author.uid = user.uid;
+      this.review.authorUid = user.uid;
+      this.review.author.name = user.displayName ?? 'anonymous';
     });
 
     this.route.paramMap.subscribe((param) => {
-      this.itemID = param.get('id')!;
+      this.handlerData.itemId = param.get('id')!;
     });
   }
 
@@ -60,26 +76,11 @@ export class PostCommentComponent implements OnInit {
     const imageUrl =
       'https://cdn0.iconfinder.com/data/icons/social-media-network-4/48/male_avatar-512.png';
 
-    const review = {
-      author: {
-        email: this.email,
-        imageUrl: imageUrl,
-        name: this.name,
-        uid: this.uid,
-      },
-      authorUid: this.uid,
-      text: this.commentForm.value.text,
-      timestamp: new Date().getTime(),
-    };
-
-    const handlerData = {
-      review: review,
-      reviewID: this.database.createPushId(),
-      itemID: this.itemID,
-    };
+    this.review.author.imageUrl = imageUrl;
+    this.review.text = this.commentForm.value.text;
 
     const comment$ = this.functions.httpsCallable('onPostComment');
-    let data = comment$(handlerData);
+    let data = comment$(this.handlerData);
     data.subscribe((res) => {
       if (res?.error) {
         this.isError = true;

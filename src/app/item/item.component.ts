@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataService } from '../services/data.service';
 import { ItemSummary } from '../models/item-summary.model';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-item',
@@ -8,26 +8,30 @@ import { ItemSummary } from '../models/item-summary.model';
   styleUrls: ['./item.component.css'],
 })
 export class ItemComponent implements OnInit {
-  constructor(private data: DataService) {}
+  constructor(private data: DataService) { }
 
   isHidden = true;
+  imagesLoaded = false;
 
-  @Input() id: string = '';
-  @Input() title: string = '';
-  @Input() imageUrl: string = '';
-  @Input() description: string = '';
-  @Input() item: ItemSummary | undefined;
+  @Input() item!: ItemSummary;
   url: string = '';
+
 
   setHidden(e: Event) {
     this.isHidden = !this.isHidden;
   }
 
-  changeItem(item: ItemSummary) {
-    this.data.changeItem(item);
-  }
 
   ngOnInit(): void {
-    this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${this.imageUrl}?alt=media`;
+    if (this.item.image_path) {
+      this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${this.item.image_path}?alt=media`;
+
+    } else {
+      this.imagesLoaded = true;
+    }
+  }
+
+  logLoad(): void {
+    this.imagesLoaded = true;
   }
 }

@@ -11,7 +11,7 @@ import { Ratings } from '../models/ratings.model';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase) { }
 
   getMenuOptions(): Observable<MenuOption[]> {
     return this.db.list<MenuOption>('menu_options').valueChanges();

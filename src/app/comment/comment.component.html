@@ -1,10 +1,10 @@
-<div class="p-4 mb-8   rounded-md bg-white min-h-36 h-36 max-h-36 overflow-y-auto hover:bg-slate-100 cursor-pointer">
+<div class="p-4 mb-8 rounded-md bg-white min-h-36 h-36 max-h-36 overflow-y-auto hover:bg-slate-100 cursor-pointer">
     <div class="flex p-4 items-center">
-        <img [src]="imageUrl" alt="" class="w-8 rounded-full">
-        <p class="pl-4 font-bold">{{name}}</p>
+        <img [src]="comment.author.imageUrl" alt="" class="w-8 rounded-full">
+        <p class="pl-4 font-bold">{{comment.author.name}}</p>
         <p class="pl-4 text-gray-400">{{date}}</p>
     </div>
     <div class="pl-10">
-        <p>{{text}}</p>
+        <p>{{ comment.text }}</p>
     </div>
 </div>
