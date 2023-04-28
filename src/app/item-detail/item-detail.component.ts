@@ -1,54 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription, combineLatest, of, switchMap } from 'rxjs';
-import { ItemContent } from '../models/item-content.model';
-import { ItemLinks } from '../models/item-links.model';
-import { ItemSummary } from '../models/item-summary.model';
+import { Subscription, of, switchMap } from 'rxjs';
+import { Item } from '../models/item.model';
 import { ApiService } from '../services/api.service';
 import { DataService } from '../services/data.service';
+import { ItemService } from '../services/item.service';
 
 @Component({
   selector: 'app-item-detail',
   templateUrl: './item-detail.component.html',
   styleUrls: ['./item-detail.component.css'],
 })
-export class ItemDetailComponent implements OnInit {
+export class ItemDetailComponent implements OnInit, OnDestroy {
   isRated = false;
   imageLoaded = false;
-  imgPathExists = true;
 
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
-    private data: DataService,
-    private functions: AngularFireFunctions,
-    private database: AngularFireDatabase,
-    private auth: AngularFireAuth
+    private itemService: ItemService,
+    private auth: AngularFireAuth,
+    private data: DataService
   ) { }
   //get item from sibling comp
-  itemContent: ItemContent = {
-    ingredients: [],
-    instructions: [],
-  };
-  itemLinks: ItemLinks = {
-    websiteUrl: '',
-    youtubeUrl: '',
-  };
-  itemSummary: ItemSummary = {
-    id: '',
-    title: '',
-  };
+
 
   itemRating = '';
   itemRatingRounded = 0;
-  url = '';
-  subscription: Subscription = new Subscription();
+  subscription?: Subscription;
   stars: Element[] = [];
-  itemID = '';
+  itemId = '';
   uid = '';
+
+  item?: Item;
+
 
   ngOnInit(): void {
     this.auth.user.subscribe((user) => {
@@ -66,39 +52,36 @@ export class ItemDetailComponent implements OnInit {
     paramMap$.pipe(switchMap(params => {
       const id = params.get('id');
       if (!id) {
-        return of([]);
+        return of();
       }
 
-      this.itemID = id;
+      return this.itemService.getItem(id);
 
-      const getItemContent$ = this.api.getItemContent(id);
-      const getItemWebsiteUrl$ = this.api.getItemWebsiteUrl(id);
-      const getItemYoutubeUrl$ = this.api.getItemYoutubeUrl(id);
-      const getRating$ = this.api.getRating(id);
-      const getSummary$ = this.api.getSummary(id);
+    })).subscribe(item => {
+      this.item = item;
+      if (!item.url) this.imageLoaded = true;
+    });
 
-      return combineLatest([getItemContent$, getItemWebsiteUrl$, getItemYoutubeUrl$, getRating$, getSummary$]);
-    })).subscribe(([item, websiteUrl, youtubeUrl, rating, summary]) => {
-      if (item) {
-        this.itemContent.ingredients = item.ingredients;
-        this.itemContent.instructions = item.instructions;
+
+
+
+    this.subscription = paramMap$.pipe(switchMap(params => {
+      const id = params.get('id');
+      if (!id) {
+        return of();
       }
 
-      if (websiteUrl) {
-        this.itemLinks.websiteUrl = websiteUrl;
-      }
+      this.itemId = id;
 
-      if (youtubeUrl) {
-        this.itemLinks.youtubeUrl = youtubeUrl;
-      }
-
-      if (rating) {
-        this.itemRating = rating?.rating!;
+      return this.api.getRating(id);
+    })).subscribe((ratings) => {
+      if (ratings) {
+        this.itemRating = ratings?.rating;
         this.itemRatingRounded = Math.round(
-          rating?.rating as unknown as number
+          ratings?.rating as unknown as number
         );
 
-        let id: number = Math.round(rating?.rating as unknown as number);
+        let id: number = Math.round(ratings?.rating as unknown as number);
 
         const starClassActive = 'rating__star fas fa-star m-4 cursor-pointer';
         const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
@@ -116,18 +99,7 @@ export class ItemDetailComponent implements OnInit {
           }
         });
       }
-
-      if (summary) {
-        this.itemSummary = summary as ItemSummary;
-
-        if (summary?.image_path) {
-          this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
-        }
-
-        this.data.changeTitle(summary?.title as string);
-      }
     });
-
   }
 
   rateRecipe(e: Event) {
@@ -140,7 +112,7 @@ export class ItemDetailComponent implements OnInit {
     const starClassInactive = 'rating__star far fa-star m-4 cursor-pointer';
     const starsLength = this.stars.length;
 
-    this.api.updateItemRating(this.itemID, this.uid, rating);
+    this.api.updateItemRating(this.itemId, this.uid, rating);
 
     if (id >= 0) {
       if (star.className === starClassInactive) {
@@ -160,6 +132,10 @@ export class ItemDetailComponent implements OnInit {
 
   logLoad(): void {
     this.imageLoaded = true;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
 }

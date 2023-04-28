@@ -54,12 +54,14 @@ export class PostCommentComponent implements OnInit {
 
   ngOnInit(): void {
     this.auth.user.subscribe((user) => {
-      if (user) {
-        this.review.author.email = user.email ?? 'anonymous';
-        this.review.author.uid = user.uid;
-        this.review.authorUid = user.uid;
-        this.review.author.name = user.displayName ?? 'anonymous';
+      if (!user) {
+        return;
       }
+
+      this.review.author.email = user.email ?? 'anonymous';
+      this.review.author.uid = user.uid;
+      this.review.authorUid = user.uid;
+      this.review.author.name = user.displayName ?? 'anonymous';
     });
 
     this.route.paramMap.subscribe((param) => {
