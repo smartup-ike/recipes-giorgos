@@ -1,7 +1,6 @@
 <div class="text-center w-48">
     <ul *ngFor="let category of menu">
-        <li (click)="changeIdAndPath(category.title, category.contents_keys_path)"
-            [routerLink]="['/category',category.contents_keys_path]"
+        <li (click)="changeTitle(category.title)" [routerLink]="['/category',category.contents_keys_path]"
             class="p-8 hover:bg-emerald-500 hover:font-bold hover:cursor-pointer">
             <p>{{ category.title }}</p>
         </li>

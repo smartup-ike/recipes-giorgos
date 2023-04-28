@@ -17,8 +17,8 @@ import { DataService } from '../services/data.service';
 })
 export class ItemDetailComponent implements OnInit {
   isRated = false;
-  imageLoaded = false
-  imgPathExists = true
+  imageLoaded = false;
+  imgPathExists = true;
 
   constructor(
     private api: ApiService,
@@ -66,18 +66,18 @@ export class ItemDetailComponent implements OnInit {
     paramMap$.pipe(switchMap(params => {
       const id = params.get('id');
       if (!id) {
-        return of([])
+        return of([]);
       }
 
       this.itemID = id;
 
-      const getItemContent$ = this.api.getItemContent(id)
-      const getItemWebsiteUrl$ = this.api.getItemWebsiteUrl(id)
-      const getItemYoutubeUrl$ = this.api.getItemYoutubeUrl(id)
-      const getRating$ = this.api.getRating(id)
+      const getItemContent$ = this.api.getItemContent(id);
+      const getItemWebsiteUrl$ = this.api.getItemWebsiteUrl(id);
+      const getItemYoutubeUrl$ = this.api.getItemYoutubeUrl(id);
+      const getRating$ = this.api.getRating(id);
       const getSummary$ = this.api.getSummary(id);
 
-      return combineLatest([getItemContent$, getItemWebsiteUrl$, getItemYoutubeUrl$, getRating$, getSummary$])
+      return combineLatest([getItemContent$, getItemWebsiteUrl$, getItemYoutubeUrl$, getRating$, getSummary$]);
     })).subscribe(([item, websiteUrl, youtubeUrl, rating, summary]) => {
       if (item) {
         this.itemContent.ingredients = item.ingredients;
@@ -118,15 +118,15 @@ export class ItemDetailComponent implements OnInit {
       }
 
       if (summary) {
-        this.itemSummary = summary as ItemSummary
+        this.itemSummary = summary as ItemSummary;
 
         if (summary?.image_path) {
           this.url = `https://firebasestorage.googleapis.com/v0/b/smartup-hr-test-frontend.appspot.com/o/${summary?.image_path}?alt=media`;
         }
 
-        this.data.changeId(summary?.title as string);
+        this.data.changeTitle(summary?.title as string);
       }
-    })
+    });
 
   }
 
@@ -159,7 +159,7 @@ export class ItemDetailComponent implements OnInit {
   }
 
   logLoad(): void {
-    this.imageLoaded = true
+    this.imageLoaded = true;
   }
 
 }

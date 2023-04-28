@@ -21,9 +21,6 @@ export class ItemComponent implements OnInit {
     this.isHidden = !this.isHidden;
   }
 
-  changeItem(item: ItemSummary) {
-    this.data.changeItem(item);
-  }
 
   ngOnInit(): void {
     if (this.item.image_path) {

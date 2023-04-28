@@ -18,7 +18,7 @@ export class CategoriesComponent implements OnInit {
     this.api.getMenuOptions().pipe(
       map((category) =>
         category.filter(
-          (category: { title: string }) => category.title !== 'test'
+          (category: { title: string; }) => category.title !== 'test'
         )
       )
     )
@@ -27,16 +27,8 @@ export class CategoriesComponent implements OnInit {
       });
   }
 
-  changeIdAndPath(title: string, path: string) {
-    this.changeId(title);
-    this.changePath(path);
+  changeTitle(title: string) {
+    this.data.changeTitle(title);
   }
 
-  changeId(title: string) {
-    this.data.changeId(title);
-  }
-
-  changePath(path: string) {
-    this.data.changePath(path);
-  }
 }
